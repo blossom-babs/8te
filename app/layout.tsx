@@ -24,7 +24,7 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={`${inter.className} custom-bg`}>
         <SessionProviderWrapper session={session}>
           {children}
         </SessionProviderWrapper>

@@ -19,3 +19,16 @@ body {
   height: 100%;
 }
 
+.custom-bg{
+  background: linear-gradient(90deg, #2b2d42, #22223b);
+}
+
+.financeFormField form input{
+  color: black;
+}
+.financeFormField form select{
+  color: black;
+}
+.financeFormField form textarea{
+  color: black;
+}
