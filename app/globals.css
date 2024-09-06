@@ -21,14 +21,19 @@ body {
 
 .custom-bg{
   background: #0A192F;
+  color: #fff;
   /* //backgroundf: #1d2839; */
 }
 
-.financeFormField form input{
-  color: black;
+
+.financeFormField label{
+  color: #ddd;
 }
 .financeFormField form select{
   color: black;
+  background-color: #eeee;
+  padding: .5rem;
+  
 }
 .financeFormField form textarea{
   color: black;
