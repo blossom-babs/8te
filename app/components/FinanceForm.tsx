@@ -4,27 +4,39 @@ import React, { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../libs/hooks';
 import { toggleForm } from "../libs/features/formSlice";
 import Modal from './Modal';
+import { getMonthString, getTimestamp } from '../utils';
 
-export const Form: React.FC = () => {
-	const [month, setMonth] = useState('');
-	const [day, setDay] = useState('');
-	const [category, setCategory] = useState('transportation');
-	const [type, setType] = useState('expense');
+interface IForm{
+  month: string,
+  year: number,
+  timestamp?: string
+}
+
+export const Form: React.FC<IForm> = ({month, year, timestamp}) => {
+	const [category, setCategory] = useState('');
+	const [type, setType] = useState('');
 	const [note, setNote] = useState('');
 	const [amount, setAmount] = useState('');
+
+  const initialState = () => {
+    setCategory('');
+    setType('');
+    setNote('');
+    setAmount('');
+  }
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 
 		const financeData = {
 			month,
-			day,
+			year,
+      timestamp,
+      type,
 			category,
 			note,
-			amount: `${amount}`
+			amount
 		};
-
-		console.log(financeData);
 
 		try {
 			const response = await fetch('/api/finances', {
@@ -37,6 +49,7 @@ export const Form: React.FC = () => {
 
 			if (response.ok) {
 				console.log('Finance data submitted successfully');
+        initialState()
 			} else {
 				console.error('Error submitting finance data');
 			}
@@ -93,13 +106,15 @@ export const Form: React.FC = () => {
 					<select
           className='w-full rounded-sm'
 						id="category"
-						value={type}
+						value={category}
 						onChange={(e) => setCategory(e.target.value)}>
-						<option value="income">transportation</option>
-						<option value="expense">food</option>
-						<option value="savings">rent</option>
-						<option value="investment">school</option>
-						<option value="giving">medical</option>
+						<option value="transportation">transportation</option>
+						<option value="food">food</option>
+						<option value="rent">rent</option>
+						<option value="school">school</option>
+						<option value="medical">medical</option>
+						<option value="salary">salary</option>
+						<option value="gift">gift</option>
 					</select>
 				</div>
 
@@ -115,6 +130,11 @@ export const Form: React.FC = () => {
 const FinanceForm: React.FC = () => {
 	const isVisible = useAppSelector((state) => state.form.isVisible);
   const dispatch = useAppDispatch()
+  const currentDate = new Date();
+  const monthIndex = currentDate.getMonth();
+  const month = getMonthString(monthIndex)
+  const year = currentDate.getFullYear();  
+  const timestamp = getTimestamp()
 
 	const closeModal = () => {
     dispatch(toggleForm())
@@ -122,8 +142,8 @@ const FinanceForm: React.FC = () => {
 
 	return (
 		<>
-			<Modal style='bg-[#1d2839] md:mr-12 md:min-h-[25rem] z-50' parent='justify-end' isOpen={isVisible} onClose={closeModal}>
-				<Form />
+			<Modal month={month} year={year} timestamp={timestamp}  style='bg-[#1d2839] md:mr-12 md:min-h-[25rem] z-50' parent='justify-end' isOpen={isVisible} onClose={closeModal}>
+				<Form month={month} year={year}  timestamp={timestamp} />
 			</Modal>
 		</>
 	);

@@ -8,7 +8,7 @@ export async function POST(req: Request) {
 
     console.log(body);
 
-    const { month, day, category, note, amount } = body;
+    const { month, year, timestamp, type, category,note, amount } = body;
 
     // Perform your operations (e.g., save to the database)
 

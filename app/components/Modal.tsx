@@ -8,10 +8,12 @@ interface ModalProps {
   children: React.ReactNode;
   style?: string
   parent?: string
+  month?: string
+  year?: number
+  timestamp?: string
 }
 
-const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, style, parent }) => {
-
+const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, style, parent, month, year, timestamp }) => {
   useEffect(() => {
     if (isOpen) {
       document.body.classList.add('overflow-hidden');
@@ -25,12 +27,14 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, style, parent 
   }, [isOpen]);
 
   if(!isOpen) return null
+
+
   
   return (
     <div className={`fixed inset-0 bg-black bg-opacity-50 flex ${parent} items-center z-20`}>
       <div className={`${style} rounded-lg shadow-lg p-6 relative max-w-md w-full`}>
         <div className="flex justify-between items-center">
-        <p className="text-sm text-[#ddd]">September 2024, 9:59pm</p>
+        <p className="text-sm text-[#ddd]">{month} {year}, {timestamp}</p>
         <button
           onClick={onClose}
           className=" hover:text-gray-800"
