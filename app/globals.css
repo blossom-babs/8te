@@ -2,8 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-}
+/* :root {
+} */
 
 @media (prefers-color-scheme: dark) {
   :root {
@@ -20,7 +20,8 @@ body {
 }
 
 .custom-bg{
-  background: linear-gradient(90deg, #2b2d42, #22223b);
+  background: #0A192F;
+  /* //backgroundf: #1d2839; */
 }
 
 .financeFormField form input{
@@ -31,4 +32,19 @@ body {
 }
 .financeFormField form textarea{
   color: black;
+}
+
+.responsive-layout{
+  width: 90%;
+  margin: 0 auto;
+}
+
+@media screen and (min-width:1530px) {
+  .responsive-layout{
+    width: 1280px;
+  }
+}
+
+.navbar{
+  color: #fff;
 }

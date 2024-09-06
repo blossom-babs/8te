@@ -43,7 +43,7 @@ const FinanceForm: React.FC = () => {
   };
 
   return (
-    <div className="financeFormField flex items-center justify-center h-screen text-white">
+    <div className="financeFormField flex items-center justify-center text-white">
     <form onSubmit={handleSubmit}>
       <div className="flex">
       <div>
