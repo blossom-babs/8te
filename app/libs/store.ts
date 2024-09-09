@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 import formReducer from './features/formSlice';
+import financeReducer from './features/financeSlice';
 
 // Create the Redux store
 export const makeStore = () => {
   return configureStore({
     reducer: {
       form: formReducer,
+      finance: financeReducer
     },
   });
 };

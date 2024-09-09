@@ -2,45 +2,20 @@
 import React, { useEffect, useState } from 'react';
 import { IoDocumentTextOutline } from 'react-icons/io5';
 import Spinner from './Spinner';
+import { fetchFinanceRecords, IRecord } from '../libs/features/financeSlice';
+import { useAppDispatch, useAppSelector } from '../libs/hooks';
 
-interface IRecord{ 
-  id: number,
-  month: string,
-  year: number,
-  timestamp: string,
-  type: string,
-  category: string,
-  note: string,
-  amount: number,
-  createdAt?: string
-}
 const Records = () => {
-  // State to store finance records and handle loading/errors
-  const [records, setRecords] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const dispatch = useAppDispatch()
+  const {records, loading, error} = useAppSelector((state) => state.finance)
+  // const [records, setRecords] = useState([]);
+  // const [loading, setLoading] = useState(true);
+  // const [error, setError] = useState(null);
 
-  // Fetch finance records from the API when the component mounts
   useEffect(() => {
-    const fetchRecords = async () => {
-      try {
-        const response = await fetch('/api/finances'); // Assuming your API route is '/api/finances'
-        if (!response.ok) {
-          throw new Error('Failed to fetch records');
-        }
-        const data = await response.json();
-        setRecords(data.data); // Assuming the data is in `data.data` as per the API response
-      } catch (err:any) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
+    dispatch(fetchFinanceRecords())
+  }, [dispatch]); 
 
-    fetchRecords();
-  }, []); // Empty dependency array to fetch data once on mount
-
-  // If data is still loading, display a loading message
   if (loading) {
     return <div>
       <Spinner height='h-[50vh]'/>
@@ -66,7 +41,7 @@ const Records = () => {
             <li key={record.id}>
             {record.month} {record.year} | 
               <strong>Type:</strong> {record.type} | <strong>Category:</strong> {record.category} | 
-              <strong>Amount:</strong> ${record.amount.toFixed(2)} | <strong>Note:</strong> {record.note || 'N/A'}
+              <strong>Amount:</strong> ${record.amount} | <strong>Note:</strong> {record.note || 'N/A'}
             </li>
           ))}
         </ul>

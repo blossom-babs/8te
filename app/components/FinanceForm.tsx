@@ -5,6 +5,8 @@ import { useAppDispatch, useAppSelector } from '../libs/hooks';
 import { toggleForm } from "../libs/features/formSlice";
 import Modal from './Modal';
 import { getDate, getMonthString, getTimestamp } from '../utils';
+import { toast, ToastContainer } from 'react-toastify';
+import { addRecord } from '../libs/features/financeSlice';
 
 interface IForm{
   date: string,
@@ -12,14 +14,13 @@ interface IForm{
 }
 
 export const Form: React.FC<IForm> = ({date, timestamp}) => {
+	const dispatch = useAppDispatch()
 	const [category, setCategory] = useState('');
 	const [type, setType] = useState('');
 	const [note, setNote] = useState('');
 	const [amount, setAmount] = useState('');
 	const [formErr, setFormErr] = useState(true);
 	const [loading, setLoading] = useState(false);
-	const [success, setSuccess] = useState(false);
-	const [error, setError] = useState(false);
 
   const initialState = () => {
     setCategory('');
@@ -31,6 +32,8 @@ export const Form: React.FC<IForm> = ({date, timestamp}) => {
 	useEffect(() => {
 		if(category !== "" && type !== "" && note !== "" && amount !== ""){
 			setFormErr(false)
+		} else{
+			setFormErr(true)
 		}
 	},[category, type, note, amount])
 
@@ -57,17 +60,17 @@ export const Form: React.FC<IForm> = ({date, timestamp}) => {
 			});
 
 			if (response.ok) {
-			setLoading(false)  
-			setSuccess(true)  
+			dispatch(addRecord(financeData))
+			toast.success('Data saved', {theme: "colored"});
+			setLoading(false)
     	initialState()
-			} else {
-				setLoading(false)  
-				setError(true)  
-				console.error('Error submitting finance data');
+		} else {
+			toast.error('Oops. Try again.', {theme: "colored"});
+			setLoading(false)  
 			}
 		} catch (error) {
-			setLoading(false)  
-			setError(true)    
+			toast.error('Oops. Try again.', {theme: "colored"});
+			setLoading(false)    
 			console.error('An error occurred:', error);
 		}
 	};
@@ -91,10 +94,11 @@ export const Form: React.FC<IForm> = ({date, timestamp}) => {
 					</select>
 				</div>
 
+
 				<div>
 					<label className='block' htmlFor="note">Note:</label>
 					<textarea
-            className='rounded-sm w-full h-28 bg-[#eeee]'
+            className='rounded-sm w-full h-28 p-2 bg-[#eeee]'
 						id="note"
 						value={note}
 						onChange={(e) => setNote(e.target.value)}
@@ -116,14 +120,15 @@ export const Form: React.FC<IForm> = ({date, timestamp}) => {
 					/>
 				</div>
 
-        <div>
+    
+				<div>
 					<label className='block' htmlFor="type">Category:</label>
 					<select
-          className='w-full rounded-sm'
+          className='w-full rounded-sm text-[#747A80]'
 						id="category"
 						value={category}
 						onChange={(e) => setCategory(e.target.value)}>
-						<option value="" disabled selected>Select category</option>
+						<option className='text-[#ddd]' value="" disabled selected>Select category</option>
 						<option value="transportation">transportation</option>
 						<option value="food">food</option>
 						<option value="rent">rent</option>
@@ -131,7 +136,10 @@ export const Form: React.FC<IForm> = ({date, timestamp}) => {
 						<option value="medical">medical</option>
 						<option value="salary">salary</option>
 						<option value="gift">gift</option>
-					</select>
+						<option value="data">data</option>
+						<option value="airtime">airtime</option>
+						<option value="phone">phone</option>
+						</select>
 				</div>
 
         <div className='flex justify-between items-center mt-7'>
@@ -141,6 +149,7 @@ export const Form: React.FC<IForm> = ({date, timestamp}) => {
 				</button>
       </div>
 			</form>
+			<ToastContainer />
 		</div>
 	);
 };
@@ -161,7 +170,7 @@ const FinanceForm: React.FC = () => {
 
 	return (
 		<>
-			<Modal date={date} timestamp={timestamp}  style='bg-[#1d2839] md:mr-12 overflow-scroll h-[80vh] lg:h-auto lg:min-h-[25rem] z-50' parent='justify-end' isOpen={isVisible} onClose={closeModal}>
+			<Modal date={date} timestamp={timestamp}  style='bg-[#1d2839] md:mr-12 overflow-y-scroll h-[80vh] lg:h-auto lg:min-h-[25rem] z-50' parent='justify-end' isOpen={isVisible} onClose={closeModal}>
 				<Form date={date}  timestamp={timestamp} />
 			</Modal>
 		</>

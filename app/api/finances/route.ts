@@ -35,8 +35,8 @@ export async function POST(req: Request) {
 export async function GET() {
   try {
     const finances = await prisma.finance.findMany();
-    
-    return NextResponse.json({ message: 'Finance data retrieved', data: finances });
+    //console.log(finances)
+    return NextResponse.json({ data: finances });
   } catch (error) {
     console.error('Error fetching finance data:', error);
     return NextResponse.json({ error: 'Failed to fetch data' }, { status: 500 });

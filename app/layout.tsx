@@ -4,6 +4,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { Nunito } from 'next/font/google';
 import './globals.css';
+import 'react-toastify/dist/ReactToastify.css';
 import { getServerSession } from 'next-auth';
 import SessionProviderWrapper from './SessionProvider';
 import { authOptions } from './api/auth/[...nextauth]';
