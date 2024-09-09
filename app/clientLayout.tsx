@@ -5,6 +5,7 @@ import store from './libs/store';
 import Navbar from './components/Navbar';
 import AddButton from './components/AddButton';
 import SessionProviderWrapper from './SessionProvider';
+import FinanceForm from './components/FinanceForm';
 
 export default function ClientLayout({
 	children,
@@ -18,7 +19,10 @@ export default function ClientLayout({
 			<SessionProviderWrapper session={session}>
 				<Navbar />
 				<div className="min-h-screen relative">
+					<div className=''>
 					<AddButton />
+					<FinanceForm/>
+					</div>
 					{children}
 				</div>
 			</SessionProviderWrapper>

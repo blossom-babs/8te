@@ -7,7 +7,7 @@ const Navbar = () => {
     <div className="responsive-layout navbar pt-7">
       <div className="flex justify-between">
     <Link href="/" className="text-3xl">8te.</Link>
-    <ul className="flex justify-center items-center gap-8">
+    <ul className="hidden md:flex justify-center items-center gap-8">
       <li>Records</li>
       <li>Analysis</li>
       <li>Budget</li>

@@ -1,22 +1,25 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../libs/hooks';
 import { toggleForm } from "../libs/features/formSlice";
 import Modal from './Modal';
-import { getMonthString, getTimestamp } from '../utils';
+import { getDate, getMonthString, getTimestamp } from '../utils';
 
 interface IForm{
-  month: string,
-  year: number,
+  date: string,
   timestamp?: string
 }
 
-export const Form: React.FC<IForm> = ({month, year, timestamp}) => {
+export const Form: React.FC<IForm> = ({date, timestamp}) => {
 	const [category, setCategory] = useState('');
 	const [type, setType] = useState('');
 	const [note, setNote] = useState('');
 	const [amount, setAmount] = useState('');
+	const [formErr, setFormErr] = useState(true);
+	const [loading, setLoading] = useState(false);
+	const [success, setSuccess] = useState(false);
+	const [error, setError] = useState(false);
 
   const initialState = () => {
     setCategory('');
@@ -25,12 +28,18 @@ export const Form: React.FC<IForm> = ({month, year, timestamp}) => {
     setAmount('');
   }
 
+	useEffect(() => {
+		if(category !== "" && type !== "" && note !== "" && amount !== ""){
+			setFormErr(false)
+		}
+	},[category, type, note, amount])
+
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
+		setLoading(true)
 
 		const financeData = {
-			month,
-			year,
+			date,
       timestamp,
       type,
 			category,
@@ -48,12 +57,17 @@ export const Form: React.FC<IForm> = ({month, year, timestamp}) => {
 			});
 
 			if (response.ok) {
-				console.log('Finance data submitted successfully');
-        initialState()
+			setLoading(false)  
+			setSuccess(true)  
+    	initialState()
 			} else {
+				setLoading(false)  
+				setError(true)  
 				console.error('Error submitting finance data');
 			}
 		} catch (error) {
+			setLoading(false)  
+			setError(true)    
 			console.error('An error occurred:', error);
 		}
 	};
@@ -68,6 +82,7 @@ export const Form: React.FC<IForm> = ({month, year, timestamp}) => {
 						id="type"
 						value={type}
 						onChange={(e) => setType(e.target.value)}>
+						<option value="" disabled selected>Select finance type</option>
 						<option value="income">Income</option>
 						<option value="expense">Expense</option>
 						<option value="savings">Savings</option>
@@ -108,6 +123,7 @@ export const Form: React.FC<IForm> = ({month, year, timestamp}) => {
 						id="category"
 						value={category}
 						onChange={(e) => setCategory(e.target.value)}>
+						<option value="" disabled selected>Select category</option>
 						<option value="transportation">transportation</option>
 						<option value="food">food</option>
 						<option value="rent">rent</option>
@@ -120,7 +136,9 @@ export const Form: React.FC<IForm> = ({month, year, timestamp}) => {
 
         <div className='flex justify-between items-center mt-7'>
 				<button className='bg-slate-300 text-black rounded-md py-2 px-5' type="button">Close</button>
-				<button className='bg-[#FFA500] font-bold text-black rounded-md py-2 px-5' type="submit">Submit</button>
+				<button disabled={formErr || loading} className={`bg-[#FFA500] font-bold text-black rounded-md py-2 px-5 ${formErr || loading ? 'opacity-60': ''}`} type="submit">
+					{loading ? 'Loading...' : 'Submit'}
+				</button>
       </div>
 			</form>
 		</div>
@@ -135,6 +153,7 @@ const FinanceForm: React.FC = () => {
   const month = getMonthString(monthIndex)
   const year = currentDate.getFullYear();  
   const timestamp = getTimestamp()
+	const date = getDate()
 
 	const closeModal = () => {
     dispatch(toggleForm())
@@ -142,8 +161,8 @@ const FinanceForm: React.FC = () => {
 
 	return (
 		<>
-			<Modal month={month} year={year} timestamp={timestamp}  style='bg-[#1d2839] md:mr-12 md:min-h-[25rem] z-50' parent='justify-end' isOpen={isVisible} onClose={closeModal}>
-				<Form month={month} year={year}  timestamp={timestamp} />
+			<Modal date={date} timestamp={timestamp}  style='bg-[#1d2839] md:mr-12 overflow-scroll h-[80vh] lg:h-auto lg:min-h-[25rem] z-50' parent='justify-end' isOpen={isVisible} onClose={closeModal}>
+				<Form date={date}  timestamp={timestamp} />
 			</Modal>
 		</>
 	);

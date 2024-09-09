@@ -14,7 +14,8 @@ const AddButton: React.FC<iAddButton> = ({}) => {
   return (
     <div className="fixed z-30 bottom-6 right-6">
     <div className="bg-[#1d2839] shadow-lg rounded-full">
-      <button onClick={() => dispatch(toggleForm())} className="cursor-pointer h-16 w-16 rounded-full flex justify-center items-center">
+      <button onClick={() =>{ 
+        dispatch(toggleForm())}} className="cursor-pointer h-16 w-16 rounded-full flex justify-center items-center">
       {isVisible ?
       <RxCross2 className="text-white text-2xl" />
     :

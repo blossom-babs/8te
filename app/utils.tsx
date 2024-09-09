@@ -19,4 +19,12 @@ hours = hours % 12 || 12; // If hours is 0, set to 12 (midnight)
 return `${hours}:${minutes < 10 ? '0' : ''}${minutes} ${amOrPm}`
 }
 
-export {getMonthString, getTimestamp}
+const getDate = () => {
+const options:Intl.DateTimeFormatOptions ={ year: 'numeric', month: 'long', day: 'numeric' };
+const date = new Date();
+const formattedDate = date.toLocaleDateString('en-US', options);
+
+return formattedDate
+}
+
+export {getMonthString, getTimestamp, getDate}
