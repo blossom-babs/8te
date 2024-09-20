@@ -11,9 +11,10 @@ import { addRecord } from '../libs/features/financeSlice';
 interface IForm{
   date: string,
   timestamp?: string
+	closeModal: () => void
 }
 
-export const Form: React.FC<IForm> = ({date, timestamp}) => {
+export const Form: React.FC<IForm> = ({date, timestamp, closeModal}) => {
 	const dispatch = useAppDispatch()
 	const [category, setCategory] = useState('');
 	const [type, setType] = useState('');
@@ -85,7 +86,7 @@ export const Form: React.FC<IForm> = ({date, timestamp}) => {
 						id="type"
 						value={type}
 						onChange={(e) => setType(e.target.value)}>
-						<option value="" disabled selected>Select finance type</option>
+						<option value="" disabled defaultValue={``}>Select finance type</option>
 						<option value="income">Income</option>
 						<option value="expense">Expense</option>
 						<option value="savings">Savings</option>
@@ -128,7 +129,7 @@ export const Form: React.FC<IForm> = ({date, timestamp}) => {
 						id="category"
 						value={category}
 						onChange={(e) => setCategory(e.target.value)}>
-						<option className='text-[#ddd]' value="" disabled selected>Select category</option>
+						<option className='text-[#ddd]' value="" disabled defaultValue={``}>Select category</option>
 						<option value="transportation">transportation</option>
 						<option value="food">food</option>
 						<option value="rent">rent</option>
@@ -143,7 +144,7 @@ export const Form: React.FC<IForm> = ({date, timestamp}) => {
 				</div>
 
         <div className='flex justify-between items-center mt-7'>
-				<button className='bg-slate-300 text-black rounded-md py-2 px-5' type="button">Close</button>
+				<button onClick={() => closeModal()} className='bg-slate-300 text-black rounded-md py-2 px-5' type="button">Close</button>
 				<button disabled={formErr || loading} className={`bg-[#FFA500] font-bold text-black rounded-md py-2 px-5 ${formErr || loading ? 'opacity-60': ''}`} type="submit">
 					{loading ? 'Loading...' : 'Submit'}
 				</button>
@@ -171,7 +172,7 @@ const FinanceForm: React.FC = () => {
 	return (
 		<>
 			<Modal date={date} timestamp={timestamp}  style='bg-[#1d2839] md:mr-12 overflow-y-scroll h-[80vh] lg:h-auto lg:min-h-[25rem] z-50' parent='justify-end' isOpen={isVisible} onClose={closeModal}>
-				<Form date={date}  timestamp={timestamp} />
+				<Form closeModal={closeModal} date={date}  timestamp={timestamp} />
 			</Modal>
 		</>
 	);

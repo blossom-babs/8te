@@ -11,14 +11,13 @@ export const fetchFinanceRecords = createAsyncThunk(
 
 export interface IRecord{ 
   id: number,
-  month: string,
-  year: number,
+  date: string,
   timestamp: string,
   type: string,
   category: string,
   note: string,
   amount: number,
-  createdAt?: string
+  createdAt: string
 }
 
 interface IFinance{
