@@ -41,11 +41,11 @@ const Records = () => {
 
   let x;
   if(groupedData){
-console.log(groupedData)
+//console.log(groupedData)
      x = Object.keys(groupedData)
   }
 
-  console.log(x); 
+  // console.log(x); 
 
   if (!groupedData || Object.keys(groupedData).length === 0) {
     return (
